@@ -1,0 +1,7 @@
+#define hcode 32
+
+struct tablelixco{
+	int longueur;
+	char lexeme;
+	int suivant;
+	

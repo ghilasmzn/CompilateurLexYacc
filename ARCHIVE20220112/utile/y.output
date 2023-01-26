@@ -1,0 +1,2425 @@
+Terminaux inutilisés dans la grammaire
+
+    ACCOLADE_OUVRANTE
+    ACCOLADE_FERMANTE
+    POUR
+
+
+Grammaire
+
+    0 $accept: programme $end
+
+    1 programme: PROG corps
+
+    2 corps: liste_declarations liste_instructions
+    3      | liste_instructions
+
+    4 liste_declarations: declaration POINT_VIRGULE
+    5                   | liste_declarations declaration POINT_VIRGULE
+
+    6 declaration: declaration_type
+    7            | declaration_variable
+    8            | declaration_procedure
+    9            | declaration_fonction
+
+   10 declaration_type: TYPE IDF DEUX_POINTS suite_declaration_type
+
+   11 suite_declaration_type: STRUCT liste_champs FSTRUCT
+   12                       | TABLEAU dimension DE nom_type
+
+   13 dimension: CROCHET_OUVRANT liste_dimensions CROCHET_FERMANT
+
+   14 liste_dimensions: une_dimension
+   15                 | liste_dimensions VIRGULE une_dimension
+
+   16 une_dimension: expression_arith POINT_POINT expression_arith
+
+   17 liste_instructions: DEBUT suite_liste_inst FIN
+
+   18 suite_liste_inst: instruction POINT_VIRGULE
+   19                 | suite_liste_inst instruction POINT_VIRGULE
+
+   20 instruction: affectation
+   21            | condition
+   22            | tant_que
+   23            | appel
+   24            | VIDE
+   25            | RETOURNE resultat_retourne
+   26            | read
+   27            | write
+
+   28 liste_champs: un_champ
+   29             | POINT_VIRGULE un_champ
+
+   30 un_champ: IDF DEUX_POINTS nom_type
+
+   31 nom_type: type_simple
+   32         | IDF
+
+   33 type_simple: ENTIER
+   34            | REEL
+   35            | BOOLEEN
+   36            | CARACTERE
+   37            | CHAINE CROCHET_OUVRANT CSTE_ENTIERE CROCHET_FERMANT
+
+   38 declaration_variable: VARIABLE IDF DEUX_POINTS nom_type
+
+   39 declaration_procedure: PROCEDURE IDF liste_parametres corps
+
+   40 declaration_fonction: FONCTION IDF liste_parametres RETOURNE type_simple corps
+
+   41 liste_parametres: PARENTHESE_OUVRANTE PARENTHESE_FERMANTE
+   42                 | PARENTHESE_OUVRANTE liste_param PARENTHESE_FERMANTE
+
+   43 liste_param: un_param
+   44            | liste_param POINT_VIRGULE un_param
+
+   45 un_param: IDF DEUX_POINTS type_simple
+
+   46 resultat_retourne: %empty
+   47                  | expression
+
+   48 appel: IDF liste_arguments
+
+   49 liste_arguments: PARENTHESE_OUVRANTE PARENTHESE_FERMANTE
+   50                | PARENTHESE_OUVRANTE liste_args PARENTHESE_FERMANTE
+
+   51 liste_args: un_arg
+   52           | liste_args VIRGULE un_arg
+
+   53 un_arg: expression
+
+   54 condition: SI expression_booleenne ALORS liste_instructions
+   55          | SI expression_booleenne ALORS liste_instructions SINON liste_instructions
+
+   56 tant_que: TANT_QUE expression_booleenne FAIRE liste_instructions
+
+   57 affectation: variable OPAFF expression
+
+   58 variable: IDF
+   59         | tableau
+   60         | IDF POINT variable
+   61         | tableau POINT variable
+
+   62 tableau: IDF CROCHET_OUVRANT rang CROCHET_FERMANT
+
+   63 rang: expression
+   64     | rang VIRGULE expression
+
+   65 expression: expression_arith
+   66           | expression_booleenne
+
+   67 expression_arith: e1
+
+   68 e1: e1 PLUS e2
+   69   | e1 MOINS e2
+   70   | e2
+
+   71 e2: e2 DIV e3
+   72   | e2 MULT e3
+   73   | e3
+
+   74 e3: PARENTHESE_OUVRANTE expression_arith PARENTHESE_FERMANTE
+   75   | e4
+
+   76 e4: variable
+   77   | CSTE_ENTIERE
+   78   | CSTE_REEL
+   79   | CSTE_CARACTERE
+   80   | appel
+
+   81 expression_booleenne: b1
+   82                     | PARENTHESE_OUVRANTE b1 PARENTHESE_FERMANTE
+
+   83 b1: b1 AND b2
+   84   | b2
+
+   85 b2: b2 OR b3
+   86   | b3
+
+   87 b3: NOT b4
+   88   | b4
+
+   89 b4: comparaison
+   90   | retourb
+   91   | CSTE_BOOLEEN
+
+   92 comparaison: expression_arith comparateur expression_arith
+
+   93 comparateur: SUPERIEUR
+   94            | INFERIEUR
+   95            | SUPERIEUR_OU_EGAL
+   96            | INFERIEUR_OU_EGAL
+   97            | EGAL
+   98            | DIFFERENT
+
+   99 retourb: VRAI
+  100        | FAUX
+
+  101 liste_variables: variable
+  102                | liste_variables VIRGULE variable
+
+  103 format: CSTE_CHAINE
+
+  104 suite_ecriture: %empty
+  105               | VIRGULE variable suite_ecriture
+
+  106 read: LIRE PARENTHESE_OUVRANTE liste_variables PARENTHESE_FERMANTE
+
+  107 write: ECRIRE PARENTHESE_OUVRANTE format suite_ecriture PARENTHESE_FERMANTE
+
+
+Terminaux, suivis des règles où ils apparaissent
+
+    $end (0) 0
+    error (256)
+    PROG (258) 1
+    DEBUT (259) 17
+    FIN (260) 17
+    POINT (261) 60 61
+    VIRGULE (262) 15 52 64 102 105
+    POINT_VIRGULE (263) 4 5 18 19 29 44
+    DEUX_POINTS (264) 10 30 38 45
+    CROCHET_OUVRANT (265) 13 37 62
+    CROCHET_FERMANT (266) 13 37 62
+    POINT_POINT (267) 16
+    PARENTHESE_OUVRANTE (268) 41 42 49 50 74 82 106 107
+    PARENTHESE_FERMANTE (269) 41 42 49 50 74 82 106 107
+    ACCOLADE_OUVRANTE (270)
+    ACCOLADE_FERMANTE (271)
+    TYPE (272) 10
+    STRUCT (273) 11
+    FSTRUCT (274) 11
+    TABLEAU (275) 12
+    DE (276) 12
+    IDF (277) 10 30 32 38 39 40 45 48 58 60 62
+    VARIABLE (278) 38
+    ENTIER (279) 33
+    REEL (280) 34
+    BOOLEEN (281) 35
+    CARACTERE (282) 36
+    CHAINE (283) 37
+    CSTE_ENTIERE (284) 37 77
+    CSTE_REEL (285) 78
+    CSTE_BOOLEEN (286) 91
+    CSTE_CARACTERE (287) 79
+    CSTE_CHAINE (288) 103
+    PROCEDURE (289) 39
+    FONCTION (290) 40
+    VIDE (291) 24
+    RETOURNE (292) 25 40
+    SI (293) 54 55
+    ALORS (294) 54 55
+    SINON (295) 55
+    POUR (296)
+    TANT_QUE (297) 56
+    FAIRE (298) 56
+    OPAFF (299) 57
+    PLUS (300) 68
+    MOINS (301) 69
+    DIV (302) 71
+    MULT (303) 72
+    AND (304) 83
+    OR (305) 85
+    NOT (306) 87
+    VRAI (307) 99
+    FAUX (308) 100
+    SUPERIEUR (309) 93
+    INFERIEUR (310) 94
+    SUPERIEUR_OU_EGAL (311) 95
+    INFERIEUR_OU_EGAL (312) 96
+    EGAL (313) 97
+    DIFFERENT (314) 98
+    LIRE (315) 106
+    ECRIRE (316) 107
+
+
+Non-terminaux, suivis des règles où ils apparaissent
+
+    $accept (62)
+        à gauche: 0
+    programme (63)
+        à gauche: 1
+        à droite: 0
+    corps (64)
+        à gauche: 2 3
+        à droite: 1 39 40
+    liste_declarations (65)
+        à gauche: 4 5
+        à droite: 2 5
+    declaration (66)
+        à gauche: 6 7 8 9
+        à droite: 4 5
+    declaration_type (67)
+        à gauche: 10
+        à droite: 6
+    suite_declaration_type (68)
+        à gauche: 11 12
+        à droite: 10
+    dimension (69)
+        à gauche: 13
+        à droite: 12
+    liste_dimensions (70)
+        à gauche: 14 15
+        à droite: 13 15
+    une_dimension (71)
+        à gauche: 16
+        à droite: 14 15
+    liste_instructions (72)
+        à gauche: 17
+        à droite: 2 3 54 55 56
+    suite_liste_inst (73)
+        à gauche: 18 19
+        à droite: 17 19
+    instruction (74)
+        à gauche: 20 21 22 23 24 25 26 27
+        à droite: 18 19
+    liste_champs (75)
+        à gauche: 28 29
+        à droite: 11
+    un_champ (76)
+        à gauche: 30
+        à droite: 28 29
+    nom_type (77)
+        à gauche: 31 32
+        à droite: 12 30 38
+    type_simple (78)
+        à gauche: 33 34 35 36 37
+        à droite: 31 40 45
+    declaration_variable (79)
+        à gauche: 38
+        à droite: 7
+    declaration_procedure (80)
+        à gauche: 39
+        à droite: 8
+    declaration_fonction (81)
+        à gauche: 40
+        à droite: 9
+    liste_parametres (82)
+        à gauche: 41 42
+        à droite: 39 40
+    liste_param (83)
+        à gauche: 43 44
+        à droite: 42 44
+    un_param (84)
+        à gauche: 45
+        à droite: 43 44
+    resultat_retourne (85)
+        à gauche: 46 47
+        à droite: 25
+    appel (86)
+        à gauche: 48
+        à droite: 23 80
+    liste_arguments (87)
+        à gauche: 49 50
+        à droite: 48
+    liste_args (88)
+        à gauche: 51 52
+        à droite: 50 52
+    un_arg (89)
+        à gauche: 53
+        à droite: 51 52
+    condition (90)
+        à gauche: 54 55
+        à droite: 21
+    tant_que (91)
+        à gauche: 56
+        à droite: 22
+    affectation (92)
+        à gauche: 57
+        à droite: 20
+    variable (93)
+        à gauche: 58 59 60 61
+        à droite: 57 60 61 76 101 102 105
+    tableau (94)
+        à gauche: 62
+        à droite: 59 61
+    rang (95)
+        à gauche: 63 64
+        à droite: 62 64
+    expression (96)
+        à gauche: 65 66
+        à droite: 47 53 57 63 64
+    expression_arith (97)
+        à gauche: 67
+        à droite: 16 65 74 92
+    e1 (98)
+        à gauche: 68 69 70
+        à droite: 67 68 69
+    e2 (99)
+        à gauche: 71 72 73
+        à droite: 68 69 70 71 72
+    e3 (100)
+        à gauche: 74 75
+        à droite: 71 72 73
+    e4 (101)
+        à gauche: 76 77 78 79 80
+        à droite: 75
+    expression_booleenne (102)
+        à gauche: 81 82
+        à droite: 54 55 56 66
+    b1 (103)
+        à gauche: 83 84
+        à droite: 81 82 83
+    b2 (104)
+        à gauche: 85 86
+        à droite: 83 84 85
+    b3 (105)
+        à gauche: 87 88
+        à droite: 85 86
+    b4 (106)
+        à gauche: 89 90 91
+        à droite: 87 88
+    comparaison (107)
+        à gauche: 92
+        à droite: 89
+    comparateur (108)
+        à gauche: 93 94 95 96 97 98
+        à droite: 92
+    retourb (109)
+        à gauche: 99 100
+        à droite: 90
+    liste_variables (110)
+        à gauche: 101 102
+        à droite: 102 106
+    format (111)
+        à gauche: 103
+        à droite: 107
+    suite_ecriture (112)
+        à gauche: 104 105
+        à droite: 105 107
+    read (113)
+        à gauche: 106
+        à droite: 26
+    write (114)
+        à gauche: 107
+        à droite: 27
+
+
+État 0
+
+    0 $accept: . programme $end
+
+    PROG  décalage et aller à l'état 1
+
+    programme  aller à l'état 2
+
+
+État 1
+
+    1 programme: PROG . corps
+
+    DEBUT      décalage et aller à l'état 3
+    TYPE       décalage et aller à l'état 4
+    VARIABLE   décalage et aller à l'état 5
+    PROCEDURE  décalage et aller à l'état 6
+    FONCTION   décalage et aller à l'état 7
+
+    corps                  aller à l'état 8
+    liste_declarations     aller à l'état 9
+    declaration            aller à l'état 10
+    declaration_type       aller à l'état 11
+    liste_instructions     aller à l'état 12
+    declaration_variable   aller à l'état 13
+    declaration_procedure  aller à l'état 14
+    declaration_fonction   aller à l'état 15
+
+
+État 2
+
+    0 $accept: programme . $end
+
+    $end  décalage et aller à l'état 16
+
+
+État 3
+
+   17 liste_instructions: DEBUT . suite_liste_inst FIN
+
+    IDF       décalage et aller à l'état 17
+    VIDE      décalage et aller à l'état 18
+    RETOURNE  décalage et aller à l'état 19
+    SI        décalage et aller à l'état 20
+    TANT_QUE  décalage et aller à l'état 21
+    LIRE      décalage et aller à l'état 22
+    ECRIRE    décalage et aller à l'état 23
+
+    suite_liste_inst  aller à l'état 24
+    instruction       aller à l'état 25
+    appel             aller à l'état 26
+    condition         aller à l'état 27
+    tant_que          aller à l'état 28
+    affectation       aller à l'état 29
+    variable          aller à l'état 30
+    tableau           aller à l'état 31
+    read              aller à l'état 32
+    write             aller à l'état 33
+
+
+État 4
+
+   10 declaration_type: TYPE . IDF DEUX_POINTS suite_declaration_type
+
+    IDF  décalage et aller à l'état 34
+
+
+État 5
+
+   38 declaration_variable: VARIABLE . IDF DEUX_POINTS nom_type
+
+    IDF  décalage et aller à l'état 35
+
+
+État 6
+
+   39 declaration_procedure: PROCEDURE . IDF liste_parametres corps
+
+    IDF  décalage et aller à l'état 36
+
+
+État 7
+
+   40 declaration_fonction: FONCTION . IDF liste_parametres RETOURNE type_simple corps
+
+    IDF  décalage et aller à l'état 37
+
+
+État 8
+
+    1 programme: PROG corps .
+
+    $défaut  réduction par utilisation de la règle 1 (programme)
+
+
+État 9
+
+    2 corps: liste_declarations . liste_instructions
+    5 liste_declarations: liste_declarations . declaration POINT_VIRGULE
+
+    DEBUT      décalage et aller à l'état 3
+    TYPE       décalage et aller à l'état 4
+    VARIABLE   décalage et aller à l'état 5
+    PROCEDURE  décalage et aller à l'état 6
+    FONCTION   décalage et aller à l'état 7
+
+    declaration            aller à l'état 38
+    declaration_type       aller à l'état 11
+    liste_instructions     aller à l'état 39
+    declaration_variable   aller à l'état 13
+    declaration_procedure  aller à l'état 14
+    declaration_fonction   aller à l'état 15
+
+
+État 10
+
+    4 liste_declarations: declaration . POINT_VIRGULE
+
+    POINT_VIRGULE  décalage et aller à l'état 40
+
+
+État 11
+
+    6 declaration: declaration_type .
+
+    $défaut  réduction par utilisation de la règle 6 (declaration)
+
+
+État 12
+
+    3 corps: liste_instructions .
+
+    $défaut  réduction par utilisation de la règle 3 (corps)
+
+
+État 13
+
+    7 declaration: declaration_variable .
+
+    $défaut  réduction par utilisation de la règle 7 (declaration)
+
+
+État 14
+
+    8 declaration: declaration_procedure .
+
+    $défaut  réduction par utilisation de la règle 8 (declaration)
+
+
+État 15
+
+    9 declaration: declaration_fonction .
+
+    $défaut  réduction par utilisation de la règle 9 (declaration)
+
+
+État 16
+
+    0 $accept: programme $end .
+
+    $défaut  accepter
+
+
+État 17
+
+   48 appel: IDF . liste_arguments
+   58 variable: IDF .
+   60         | IDF . POINT variable
+   62 tableau: IDF . CROCHET_OUVRANT rang CROCHET_FERMANT
+
+    POINT                décalage et aller à l'état 41
+    CROCHET_OUVRANT      décalage et aller à l'état 42
+    PARENTHESE_OUVRANTE  décalage et aller à l'état 43
+
+    $défaut  réduction par utilisation de la règle 58 (variable)
+
+    liste_arguments  aller à l'état 44
+
+
+État 18
+
+   24 instruction: VIDE .
+
+    $défaut  réduction par utilisation de la règle 24 (instruction)
+
+
+État 19
+
+   25 instruction: RETOURNE . resultat_retourne
+
+    PARENTHESE_OUVRANTE  décalage et aller à l'état 45
+    IDF                  décalage et aller à l'état 17
+    CSTE_ENTIERE         décalage et aller à l'état 46
+    CSTE_REEL            décalage et aller à l'état 47
+    CSTE_BOOLEEN         décalage et aller à l'état 48
+    CSTE_CARACTERE       décalage et aller à l'état 49
+    NOT                  décalage et aller à l'état 50
+    VRAI                 décalage et aller à l'état 51
+    FAUX                 décalage et aller à l'état 52
+
+    $défaut  réduction par utilisation de la règle 46 (resultat_retourne)
+
+    resultat_retourne     aller à l'état 53
+    appel                 aller à l'état 54
+    variable              aller à l'état 55
+    tableau               aller à l'état 31
+    expression            aller à l'état 56
+    expression_arith      aller à l'état 57
+    e1                    aller à l'état 58
+    e2                    aller à l'état 59
+    e3                    aller à l'état 60
+    e4                    aller à l'état 61
+    expression_booleenne  aller à l'état 62
+    b1                    aller à l'état 63
+    b2                    aller à l'état 64
+    b3                    aller à l'état 65
+    b4                    aller à l'état 66
+    comparaison           aller à l'état 67
+    retourb               aller à l'état 68
+
+
+État 20
+
+   54 condition: SI . expression_booleenne ALORS liste_instructions
+   55          | SI . expression_booleenne ALORS liste_instructions SINON liste_instructions
+
+    PARENTHESE_OUVRANTE  décalage et aller à l'état 45
+    IDF                  décalage et aller à l'état 17
+    CSTE_ENTIERE         décalage et aller à l'état 46
+    CSTE_REEL            décalage et aller à l'état 47
+    CSTE_BOOLEEN         décalage et aller à l'état 48
+    CSTE_CARACTERE       décalage et aller à l'état 49
+    NOT                  décalage et aller à l'état 50
+    VRAI                 décalage et aller à l'état 51
+    FAUX                 décalage et aller à l'état 52
+
+    appel                 aller à l'état 54
+    variable              aller à l'état 55
+    tableau               aller à l'état 31
+    expression_arith      aller à l'état 69
+    e1                    aller à l'état 58
+    e2                    aller à l'état 59
+    e3                    aller à l'état 60
+    e4                    aller à l'état 61
+    expression_booleenne  aller à l'état 70
+    b1                    aller à l'état 63
+    b2                    aller à l'état 64
+    b3                    aller à l'état 65
+    b4                    aller à l'état 66
+    comparaison           aller à l'état 67
+    retourb               aller à l'état 68
+
+
+État 21
+
+   56 tant_que: TANT_QUE . expression_booleenne FAIRE liste_instructions
+
+    PARENTHESE_OUVRANTE  décalage et aller à l'état 45
+    IDF                  décalage et aller à l'état 17
+    CSTE_ENTIERE         décalage et aller à l'état 46
+    CSTE_REEL            décalage et aller à l'état 47
+    CSTE_BOOLEEN         décalage et aller à l'état 48
+    CSTE_CARACTERE       décalage et aller à l'état 49
+    NOT                  décalage et aller à l'état 50
+    VRAI                 décalage et aller à l'état 51
+    FAUX                 décalage et aller à l'état 52
+
+    appel                 aller à l'état 54
+    variable              aller à l'état 55
+    tableau               aller à l'état 31
+    expression_arith      aller à l'état 69
+    e1                    aller à l'état 58
+    e2                    aller à l'état 59
+    e3                    aller à l'état 60
+    e4                    aller à l'état 61
+    expression_booleenne  aller à l'état 71
+    b1                    aller à l'état 63
+    b2                    aller à l'état 64
+    b3                    aller à l'état 65
+    b4                    aller à l'état 66
+    comparaison           aller à l'état 67
+    retourb               aller à l'état 68
+
+
+État 22
+
+  106 read: LIRE . PARENTHESE_OUVRANTE liste_variables PARENTHESE_FERMANTE
+
+    PARENTHESE_OUVRANTE  décalage et aller à l'état 72
+
+
+État 23
+
+  107 write: ECRIRE . PARENTHESE_OUVRANTE format suite_ecriture PARENTHESE_FERMANTE
+
+    PARENTHESE_OUVRANTE  décalage et aller à l'état 73
+
+
+État 24
+
+   17 liste_instructions: DEBUT suite_liste_inst . FIN
+   19 suite_liste_inst: suite_liste_inst . instruction POINT_VIRGULE
+
+    FIN       décalage et aller à l'état 74
+    IDF       décalage et aller à l'état 17
+    VIDE      décalage et aller à l'état 18
+    RETOURNE  décalage et aller à l'état 19
+    SI        décalage et aller à l'état 20
+    TANT_QUE  décalage et aller à l'état 21
+    LIRE      décalage et aller à l'état 22
+    ECRIRE    décalage et aller à l'état 23
+
+    instruction  aller à l'état 75
+    appel        aller à l'état 26
+    condition    aller à l'état 27
+    tant_que     aller à l'état 28
+    affectation  aller à l'état 29
+    variable     aller à l'état 30
+    tableau      aller à l'état 31
+    read         aller à l'état 32
+    write        aller à l'état 33
+
+
+État 25
+
+   18 suite_liste_inst: instruction . POINT_VIRGULE
+
+    POINT_VIRGULE  décalage et aller à l'état 76
+
+
+État 26
+
+   23 instruction: appel .
+
+    $défaut  réduction par utilisation de la règle 23 (instruction)
+
+
+État 27
+
+   21 instruction: condition .
+
+    $défaut  réduction par utilisation de la règle 21 (instruction)
+
+
+État 28
+
+   22 instruction: tant_que .
+
+    $défaut  réduction par utilisation de la règle 22 (instruction)
+
+
+État 29
+
+   20 instruction: affectation .
+
+    $défaut  réduction par utilisation de la règle 20 (instruction)
+
+
+État 30
+
+   57 affectation: variable . OPAFF expression
+
+    OPAFF  décalage et aller à l'état 77
+
+
+État 31
+
+   59 variable: tableau .
+   61         | tableau . POINT variable
+
+    POINT  décalage et aller à l'état 78
+
+    $défaut  réduction par utilisation de la règle 59 (variable)
+
+
+État 32
+
+   26 instruction: read .
+
+    $défaut  réduction par utilisation de la règle 26 (instruction)
+
+
+État 33
+
+   27 instruction: write .
+
+    $défaut  réduction par utilisation de la règle 27 (instruction)
+
+
+État 34
+
+   10 declaration_type: TYPE IDF . DEUX_POINTS suite_declaration_type
+
+    DEUX_POINTS  décalage et aller à l'état 79
+
+
+État 35
+
+   38 declaration_variable: VARIABLE IDF . DEUX_POINTS nom_type
+
+    DEUX_POINTS  décalage et aller à l'état 80
+
+
+État 36
+
+   39 declaration_procedure: PROCEDURE IDF . liste_parametres corps
+
+    PARENTHESE_OUVRANTE  décalage et aller à l'état 81
+
+    liste_parametres  aller à l'état 82
+
+
+État 37
+
+   40 declaration_fonction: FONCTION IDF . liste_parametres RETOURNE type_simple corps
+
+    PARENTHESE_OUVRANTE  décalage et aller à l'état 81
+
+    liste_parametres  aller à l'état 83
+
+
+État 38
+
+    5 liste_declarations: liste_declarations declaration . POINT_VIRGULE
+
+    POINT_VIRGULE  décalage et aller à l'état 84
+
+
+État 39
+
+    2 corps: liste_declarations liste_instructions .
+
+    $défaut  réduction par utilisation de la règle 2 (corps)
+
+
+État 40
+
+    4 liste_declarations: declaration POINT_VIRGULE .
+
+    $défaut  réduction par utilisation de la règle 4 (liste_declarations)
+
+
+État 41
+
+   60 variable: IDF POINT . variable
+
+    IDF  décalage et aller à l'état 85
+
+    variable  aller à l'état 86
+    tableau   aller à l'état 31
+
+
+État 42
+
+   62 tableau: IDF CROCHET_OUVRANT . rang CROCHET_FERMANT
+
+    PARENTHESE_OUVRANTE  décalage et aller à l'état 45
+    IDF                  décalage et aller à l'état 17
+    CSTE_ENTIERE         décalage et aller à l'état 46
+    CSTE_REEL            décalage et aller à l'état 47
+    CSTE_BOOLEEN         décalage et aller à l'état 48
+    CSTE_CARACTERE       décalage et aller à l'état 49
+    NOT                  décalage et aller à l'état 50
+    VRAI                 décalage et aller à l'état 51
+    FAUX                 décalage et aller à l'état 52
+
+    appel                 aller à l'état 54
+    variable              aller à l'état 55
+    tableau               aller à l'état 31
+    rang                  aller à l'état 87
+    expression            aller à l'état 88
+    expression_arith      aller à l'état 57
+    e1                    aller à l'état 58
+    e2                    aller à l'état 59
+    e3                    aller à l'état 60
+    e4                    aller à l'état 61
+    expression_booleenne  aller à l'état 62
+    b1                    aller à l'état 63
+    b2                    aller à l'état 64
+    b3                    aller à l'état 65
+    b4                    aller à l'état 66
+    comparaison           aller à l'état 67
+    retourb               aller à l'état 68
+
+
+État 43
+
+   49 liste_arguments: PARENTHESE_OUVRANTE . PARENTHESE_FERMANTE
+   50                | PARENTHESE_OUVRANTE . liste_args PARENTHESE_FERMANTE
+
+    PARENTHESE_OUVRANTE  décalage et aller à l'état 45
+    PARENTHESE_FERMANTE  décalage et aller à l'état 89
+    IDF                  décalage et aller à l'état 17
+    CSTE_ENTIERE         décalage et aller à l'état 46
+    CSTE_REEL            décalage et aller à l'état 47
+    CSTE_BOOLEEN         décalage et aller à l'état 48
+    CSTE_CARACTERE       décalage et aller à l'état 49
+    NOT                  décalage et aller à l'état 50
+    VRAI                 décalage et aller à l'état 51
+    FAUX                 décalage et aller à l'état 52
+
+    appel                 aller à l'état 54
+    liste_args            aller à l'état 90
+    un_arg                aller à l'état 91
+    variable              aller à l'état 55
+    tableau               aller à l'état 31
+    expression            aller à l'état 92
+    expression_arith      aller à l'état 57
+    e1                    aller à l'état 58
+    e2                    aller à l'état 59
+    e3                    aller à l'état 60
+    e4                    aller à l'état 61
+    expression_booleenne  aller à l'état 62
+    b1                    aller à l'état 63
+    b2                    aller à l'état 64
+    b3                    aller à l'état 65
+    b4                    aller à l'état 66
+    comparaison           aller à l'état 67
+    retourb               aller à l'état 68
+
+
+État 44
+
+   48 appel: IDF liste_arguments .
+
+    $défaut  réduction par utilisation de la règle 48 (appel)
+
+
+État 45
+
+   74 e3: PARENTHESE_OUVRANTE . expression_arith PARENTHESE_FERMANTE
+   82 expression_booleenne: PARENTHESE_OUVRANTE . b1 PARENTHESE_FERMANTE
+
+    PARENTHESE_OUVRANTE  décalage et aller à l'état 93
+    IDF                  décalage et aller à l'état 17
+    CSTE_ENTIERE         décalage et aller à l'état 46
+    CSTE_REEL            décalage et aller à l'état 47
+    CSTE_BOOLEEN         décalage et aller à l'état 48
+    CSTE_CARACTERE       décalage et aller à l'état 49
+    NOT                  décalage et aller à l'état 50
+    VRAI                 décalage et aller à l'état 51
+    FAUX                 décalage et aller à l'état 52
+
+    appel             aller à l'état 54
+    variable          aller à l'état 55
+    tableau           aller à l'état 31
+    expression_arith  aller à l'état 94
+    e1                aller à l'état 58
+    e2                aller à l'état 59
+    e3                aller à l'état 60
+    e4                aller à l'état 61
+    b1                aller à l'état 95
+    b2                aller à l'état 64
+    b3                aller à l'état 65
+    b4                aller à l'état 66
+    comparaison       aller à l'état 67
+    retourb           aller à l'état 68
+
+
+État 46
+
+   77 e4: CSTE_ENTIERE .
+
+    $défaut  réduction par utilisation de la règle 77 (e4)
+
+
+État 47
+
+   78 e4: CSTE_REEL .
+
+    $défaut  réduction par utilisation de la règle 78 (e4)
+
+
+État 48
+
+   91 b4: CSTE_BOOLEEN .
+
+    $défaut  réduction par utilisation de la règle 91 (b4)
+
+
+État 49
+
+   79 e4: CSTE_CARACTERE .
+
+    $défaut  réduction par utilisation de la règle 79 (e4)
+
+
+État 50
+
+   87 b3: NOT . b4
+
+    PARENTHESE_OUVRANTE  décalage et aller à l'état 93
+    IDF                  décalage et aller à l'état 17
+    CSTE_ENTIERE         décalage et aller à l'état 46
+    CSTE_REEL            décalage et aller à l'état 47
+    CSTE_BOOLEEN         décalage et aller à l'état 48
+    CSTE_CARACTERE       décalage et aller à l'état 49
+    VRAI                 décalage et aller à l'état 51
+    FAUX                 décalage et aller à l'état 52
+
+    appel             aller à l'état 54
+    variable          aller à l'état 55
+    tableau           aller à l'état 31
+    expression_arith  aller à l'état 69
+    e1                aller à l'état 58
+    e2                aller à l'état 59
+    e3                aller à l'état 60
+    e4                aller à l'état 61
+    b4                aller à l'état 96
+    comparaison       aller à l'état 67
+    retourb           aller à l'état 68
+
+
+État 51
+
+   99 retourb: VRAI .
+
+    $défaut  réduction par utilisation de la règle 99 (retourb)
+
+
+État 52
+
+  100 retourb: FAUX .
+
+    $défaut  réduction par utilisation de la règle 100 (retourb)
+
+
+État 53
+
+   25 instruction: RETOURNE resultat_retourne .
+
+    $défaut  réduction par utilisation de la règle 25 (instruction)
+
+
+État 54
+
+   80 e4: appel .
+
+    $défaut  réduction par utilisation de la règle 80 (e4)
+
+
+État 55
+
+   76 e4: variable .
+
+    $défaut  réduction par utilisation de la règle 76 (e4)
+
+
+État 56
+
+   47 resultat_retourne: expression .
+
+    $défaut  réduction par utilisation de la règle 47 (resultat_retourne)
+
+
+État 57
+
+   65 expression: expression_arith .
+   92 comparaison: expression_arith . comparateur expression_arith
+
+    SUPERIEUR          décalage et aller à l'état 97
+    INFERIEUR          décalage et aller à l'état 98
+    SUPERIEUR_OU_EGAL  décalage et aller à l'état 99
+    INFERIEUR_OU_EGAL  décalage et aller à l'état 100
+    EGAL               décalage et aller à l'état 101
+    DIFFERENT          décalage et aller à l'état 102
+
+    $défaut  réduction par utilisation de la règle 65 (expression)
+
+    comparateur  aller à l'état 103
+
+
+État 58
+
+   67 expression_arith: e1 .
+   68 e1: e1 . PLUS e2
+   69   | e1 . MOINS e2
+
+    PLUS   décalage et aller à l'état 104
+    MOINS  décalage et aller à l'état 105
+
+    $défaut  réduction par utilisation de la règle 67 (expression_arith)
+
+
+État 59
+
+   70 e1: e2 .
+   71 e2: e2 . DIV e3
+   72   | e2 . MULT e3
+
+    DIV   décalage et aller à l'état 106
+    MULT  décalage et aller à l'état 107
+
+    $défaut  réduction par utilisation de la règle 70 (e1)
+
+
+État 60
+
+   73 e2: e3 .
+
+    $défaut  réduction par utilisation de la règle 73 (e2)
+
+
+État 61
+
+   75 e3: e4 .
+
+    $défaut  réduction par utilisation de la règle 75 (e3)
+
+
+État 62
+
+   66 expression: expression_booleenne .
+
+    $défaut  réduction par utilisation de la règle 66 (expression)
+
+
+État 63
+
+   81 expression_booleenne: b1 .
+   83 b1: b1 . AND b2
+
+    AND  décalage et aller à l'état 108
+
+    $défaut  réduction par utilisation de la règle 81 (expression_booleenne)
+
+
+État 64
+
+   84 b1: b2 .
+   85 b2: b2 . OR b3
+
+    OR  décalage et aller à l'état 109
+
+    $défaut  réduction par utilisation de la règle 84 (b1)
+
+
+État 65
+
+   86 b2: b3 .
+
+    $défaut  réduction par utilisation de la règle 86 (b2)
+
+
+État 66
+
+   88 b3: b4 .
+
+    $défaut  réduction par utilisation de la règle 88 (b3)
+
+
+État 67
+
+   89 b4: comparaison .
+
+    $défaut  réduction par utilisation de la règle 89 (b4)
+
+
+État 68
+
+   90 b4: retourb .
+
+    $défaut  réduction par utilisation de la règle 90 (b4)
+
+
+État 69
+
+   92 comparaison: expression_arith . comparateur expression_arith
+
+    SUPERIEUR          décalage et aller à l'état 97
+    INFERIEUR          décalage et aller à l'état 98
+    SUPERIEUR_OU_EGAL  décalage et aller à l'état 99
+    INFERIEUR_OU_EGAL  décalage et aller à l'état 100
+    EGAL               décalage et aller à l'état 101
+    DIFFERENT          décalage et aller à l'état 102
+
+    comparateur  aller à l'état 103
+
+
+État 70
+
+   54 condition: SI expression_booleenne . ALORS liste_instructions
+   55          | SI expression_booleenne . ALORS liste_instructions SINON liste_instructions
+
+    ALORS  décalage et aller à l'état 110
+
+
+État 71
+
+   56 tant_que: TANT_QUE expression_booleenne . FAIRE liste_instructions
+
+    FAIRE  décalage et aller à l'état 111
+
+
+État 72
+
+  106 read: LIRE PARENTHESE_OUVRANTE . liste_variables PARENTHESE_FERMANTE
+
+    IDF  décalage et aller à l'état 85
+
+    variable         aller à l'état 112
+    tableau          aller à l'état 31
+    liste_variables  aller à l'état 113
+
+
+État 73
+
+  107 write: ECRIRE PARENTHESE_OUVRANTE . format suite_ecriture PARENTHESE_FERMANTE
+
+    CSTE_CHAINE  décalage et aller à l'état 114
+
+    format  aller à l'état 115
+
+
+État 74
+
+   17 liste_instructions: DEBUT suite_liste_inst FIN .
+
+    $défaut  réduction par utilisation de la règle 17 (liste_instructions)
+
+
+État 75
+
+   19 suite_liste_inst: suite_liste_inst instruction . POINT_VIRGULE
+
+    POINT_VIRGULE  décalage et aller à l'état 116
+
+
+État 76
+
+   18 suite_liste_inst: instruction POINT_VIRGULE .
+
+    $défaut  réduction par utilisation de la règle 18 (suite_liste_inst)
+
+
+État 77
+
+   57 affectation: variable OPAFF . expression
+
+    PARENTHESE_OUVRANTE  décalage et aller à l'état 45
+    IDF                  décalage et aller à l'état 17
+    CSTE_ENTIERE         décalage et aller à l'état 46
+    CSTE_REEL            décalage et aller à l'état 47
+    CSTE_BOOLEEN         décalage et aller à l'état 48
+    CSTE_CARACTERE       décalage et aller à l'état 49
+    NOT                  décalage et aller à l'état 50
+    VRAI                 décalage et aller à l'état 51
+    FAUX                 décalage et aller à l'état 52
+
+    appel                 aller à l'état 54
+    variable              aller à l'état 55
+    tableau               aller à l'état 31
+    expression            aller à l'état 117
+    expression_arith      aller à l'état 57
+    e1                    aller à l'état 58
+    e2                    aller à l'état 59
+    e3                    aller à l'état 60
+    e4                    aller à l'état 61
+    expression_booleenne  aller à l'état 62
+    b1                    aller à l'état 63
+    b2                    aller à l'état 64
+    b3                    aller à l'état 65
+    b4                    aller à l'état 66
+    comparaison           aller à l'état 67
+    retourb               aller à l'état 68
+
+
+État 78
+
+   61 variable: tableau POINT . variable
+
+    IDF  décalage et aller à l'état 85
+
+    variable  aller à l'état 118
+    tableau   aller à l'état 31
+
+
+État 79
+
+   10 declaration_type: TYPE IDF DEUX_POINTS . suite_declaration_type
+
+    STRUCT   décalage et aller à l'état 119
+    TABLEAU  décalage et aller à l'état 120
+
+    suite_declaration_type  aller à l'état 121
+
+
+État 80
+
+   38 declaration_variable: VARIABLE IDF DEUX_POINTS . nom_type
+
+    IDF        décalage et aller à l'état 122
+    ENTIER     décalage et aller à l'état 123
+    REEL       décalage et aller à l'état 124
+    BOOLEEN    décalage et aller à l'état 125
+    CARACTERE  décalage et aller à l'état 126
+    CHAINE     décalage et aller à l'état 127
+
+    nom_type     aller à l'état 128
+    type_simple  aller à l'état 129
+
+
+État 81
+
+   41 liste_parametres: PARENTHESE_OUVRANTE . PARENTHESE_FERMANTE
+   42                 | PARENTHESE_OUVRANTE . liste_param PARENTHESE_FERMANTE
+
+    PARENTHESE_FERMANTE  décalage et aller à l'état 130
+    IDF                  décalage et aller à l'état 131
+
+    liste_param  aller à l'état 132
+    un_param     aller à l'état 133
+
+
+État 82
+
+   39 declaration_procedure: PROCEDURE IDF liste_parametres . corps
+
+    DEBUT      décalage et aller à l'état 3
+    TYPE       décalage et aller à l'état 4
+    VARIABLE   décalage et aller à l'état 5
+    PROCEDURE  décalage et aller à l'état 6
+    FONCTION   décalage et aller à l'état 7
+
+    corps                  aller à l'état 134
+    liste_declarations     aller à l'état 9
+    declaration            aller à l'état 10
+    declaration_type       aller à l'état 11
+    liste_instructions     aller à l'état 12
+    declaration_variable   aller à l'état 13
+    declaration_procedure  aller à l'état 14
+    declaration_fonction   aller à l'état 15
+
+
+État 83
+
+   40 declaration_fonction: FONCTION IDF liste_parametres . RETOURNE type_simple corps
+
+    RETOURNE  décalage et aller à l'état 135
+
+
+État 84
+
+    5 liste_declarations: liste_declarations declaration POINT_VIRGULE .
+
+    $défaut  réduction par utilisation de la règle 5 (liste_declarations)
+
+
+État 85
+
+   58 variable: IDF .
+   60         | IDF . POINT variable
+   62 tableau: IDF . CROCHET_OUVRANT rang CROCHET_FERMANT
+
+    POINT            décalage et aller à l'état 41
+    CROCHET_OUVRANT  décalage et aller à l'état 42
+
+    $défaut  réduction par utilisation de la règle 58 (variable)
+
+
+État 86
+
+   60 variable: IDF POINT variable .
+
+    $défaut  réduction par utilisation de la règle 60 (variable)
+
+
+État 87
+
+   62 tableau: IDF CROCHET_OUVRANT rang . CROCHET_FERMANT
+   64 rang: rang . VIRGULE expression
+
+    VIRGULE          décalage et aller à l'état 136
+    CROCHET_FERMANT  décalage et aller à l'état 137
+
+
+État 88
+
+   63 rang: expression .
+
+    $défaut  réduction par utilisation de la règle 63 (rang)
+
+
+État 89
+
+   49 liste_arguments: PARENTHESE_OUVRANTE PARENTHESE_FERMANTE .
+
+    $défaut  réduction par utilisation de la règle 49 (liste_arguments)
+
+
+État 90
+
+   50 liste_arguments: PARENTHESE_OUVRANTE liste_args . PARENTHESE_FERMANTE
+   52 liste_args: liste_args . VIRGULE un_arg
+
+    VIRGULE              décalage et aller à l'état 138
+    PARENTHESE_FERMANTE  décalage et aller à l'état 139
+
+
+État 91
+
+   51 liste_args: un_arg .
+
+    $défaut  réduction par utilisation de la règle 51 (liste_args)
+
+
+État 92
+
+   53 un_arg: expression .
+
+    $défaut  réduction par utilisation de la règle 53 (un_arg)
+
+
+État 93
+
+   74 e3: PARENTHESE_OUVRANTE . expression_arith PARENTHESE_FERMANTE
+
+    PARENTHESE_OUVRANTE  décalage et aller à l'état 93
+    IDF                  décalage et aller à l'état 17
+    CSTE_ENTIERE         décalage et aller à l'état 46
+    CSTE_REEL            décalage et aller à l'état 47
+    CSTE_CARACTERE       décalage et aller à l'état 49
+
+    appel             aller à l'état 54
+    variable          aller à l'état 55
+    tableau           aller à l'état 31
+    expression_arith  aller à l'état 140
+    e1                aller à l'état 58
+    e2                aller à l'état 59
+    e3                aller à l'état 60
+    e4                aller à l'état 61
+
+
+État 94
+
+   74 e3: PARENTHESE_OUVRANTE expression_arith . PARENTHESE_FERMANTE
+   92 comparaison: expression_arith . comparateur expression_arith
+
+    PARENTHESE_FERMANTE  décalage et aller à l'état 141
+    SUPERIEUR            décalage et aller à l'état 97
+    INFERIEUR            décalage et aller à l'état 98
+    SUPERIEUR_OU_EGAL    décalage et aller à l'état 99
+    INFERIEUR_OU_EGAL    décalage et aller à l'état 100
+    EGAL                 décalage et aller à l'état 101
+    DIFFERENT            décalage et aller à l'état 102
+
+    comparateur  aller à l'état 103
+
+
+État 95
+
+   82 expression_booleenne: PARENTHESE_OUVRANTE b1 . PARENTHESE_FERMANTE
+   83 b1: b1 . AND b2
+
+    PARENTHESE_FERMANTE  décalage et aller à l'état 142
+    AND                  décalage et aller à l'état 108
+
+
+État 96
+
+   87 b3: NOT b4 .
+
+    $défaut  réduction par utilisation de la règle 87 (b3)
+
+
+État 97
+
+   93 comparateur: SUPERIEUR .
+
+    $défaut  réduction par utilisation de la règle 93 (comparateur)
+
+
+État 98
+
+   94 comparateur: INFERIEUR .
+
+    $défaut  réduction par utilisation de la règle 94 (comparateur)
+
+
+État 99
+
+   95 comparateur: SUPERIEUR_OU_EGAL .
+
+    $défaut  réduction par utilisation de la règle 95 (comparateur)
+
+
+État 100
+
+   96 comparateur: INFERIEUR_OU_EGAL .
+
+    $défaut  réduction par utilisation de la règle 96 (comparateur)
+
+
+État 101
+
+   97 comparateur: EGAL .
+
+    $défaut  réduction par utilisation de la règle 97 (comparateur)
+
+
+État 102
+
+   98 comparateur: DIFFERENT .
+
+    $défaut  réduction par utilisation de la règle 98 (comparateur)
+
+
+État 103
+
+   92 comparaison: expression_arith comparateur . expression_arith
+
+    PARENTHESE_OUVRANTE  décalage et aller à l'état 93
+    IDF                  décalage et aller à l'état 17
+    CSTE_ENTIERE         décalage et aller à l'état 46
+    CSTE_REEL            décalage et aller à l'état 47
+    CSTE_CARACTERE       décalage et aller à l'état 49
+
+    appel             aller à l'état 54
+    variable          aller à l'état 55
+    tableau           aller à l'état 31
+    expression_arith  aller à l'état 143
+    e1                aller à l'état 58
+    e2                aller à l'état 59
+    e3                aller à l'état 60
+    e4                aller à l'état 61
+
+
+État 104
+
+   68 e1: e1 PLUS . e2
+
+    PARENTHESE_OUVRANTE  décalage et aller à l'état 93
+    IDF                  décalage et aller à l'état 17
+    CSTE_ENTIERE         décalage et aller à l'état 46
+    CSTE_REEL            décalage et aller à l'état 47
+    CSTE_CARACTERE       décalage et aller à l'état 49
+
+    appel     aller à l'état 54
+    variable  aller à l'état 55
+    tableau   aller à l'état 31
+    e2        aller à l'état 144
+    e3        aller à l'état 60
+    e4        aller à l'état 61
+
+
+État 105
+
+   69 e1: e1 MOINS . e2
+
+    PARENTHESE_OUVRANTE  décalage et aller à l'état 93
+    IDF                  décalage et aller à l'état 17
+    CSTE_ENTIERE         décalage et aller à l'état 46
+    CSTE_REEL            décalage et aller à l'état 47
+    CSTE_CARACTERE       décalage et aller à l'état 49
+
+    appel     aller à l'état 54
+    variable  aller à l'état 55
+    tableau   aller à l'état 31
+    e2        aller à l'état 145
+    e3        aller à l'état 60
+    e4        aller à l'état 61
+
+
+État 106
+
+   71 e2: e2 DIV . e3
+
+    PARENTHESE_OUVRANTE  décalage et aller à l'état 93
+    IDF                  décalage et aller à l'état 17
+    CSTE_ENTIERE         décalage et aller à l'état 46
+    CSTE_REEL            décalage et aller à l'état 47
+    CSTE_CARACTERE       décalage et aller à l'état 49
+
+    appel     aller à l'état 54
+    variable  aller à l'état 55
+    tableau   aller à l'état 31
+    e3        aller à l'état 146
+    e4        aller à l'état 61
+
+
+État 107
+
+   72 e2: e2 MULT . e3
+
+    PARENTHESE_OUVRANTE  décalage et aller à l'état 93
+    IDF                  décalage et aller à l'état 17
+    CSTE_ENTIERE         décalage et aller à l'état 46
+    CSTE_REEL            décalage et aller à l'état 47
+    CSTE_CARACTERE       décalage et aller à l'état 49
+
+    appel     aller à l'état 54
+    variable  aller à l'état 55
+    tableau   aller à l'état 31
+    e3        aller à l'état 147
+    e4        aller à l'état 61
+
+
+État 108
+
+   83 b1: b1 AND . b2
+
+    PARENTHESE_OUVRANTE  décalage et aller à l'état 93
+    IDF                  décalage et aller à l'état 17
+    CSTE_ENTIERE         décalage et aller à l'état 46
+    CSTE_REEL            décalage et aller à l'état 47
+    CSTE_BOOLEEN         décalage et aller à l'état 48
+    CSTE_CARACTERE       décalage et aller à l'état 49
+    NOT                  décalage et aller à l'état 50
+    VRAI                 décalage et aller à l'état 51
+    FAUX                 décalage et aller à l'état 52
+
+    appel             aller à l'état 54
+    variable          aller à l'état 55
+    tableau           aller à l'état 31
+    expression_arith  aller à l'état 69
+    e1                aller à l'état 58
+    e2                aller à l'état 59
+    e3                aller à l'état 60
+    e4                aller à l'état 61
+    b2                aller à l'état 148
+    b3                aller à l'état 65
+    b4                aller à l'état 66
+    comparaison       aller à l'état 67
+    retourb           aller à l'état 68
+
+
+État 109
+
+   85 b2: b2 OR . b3
+
+    PARENTHESE_OUVRANTE  décalage et aller à l'état 93
+    IDF                  décalage et aller à l'état 17
+    CSTE_ENTIERE         décalage et aller à l'état 46
+    CSTE_REEL            décalage et aller à l'état 47
+    CSTE_BOOLEEN         décalage et aller à l'état 48
+    CSTE_CARACTERE       décalage et aller à l'état 49
+    NOT                  décalage et aller à l'état 50
+    VRAI                 décalage et aller à l'état 51
+    FAUX                 décalage et aller à l'état 52
+
+    appel             aller à l'état 54
+    variable          aller à l'état 55
+    tableau           aller à l'état 31
+    expression_arith  aller à l'état 69
+    e1                aller à l'état 58
+    e2                aller à l'état 59
+    e3                aller à l'état 60
+    e4                aller à l'état 61
+    b3                aller à l'état 149
+    b4                aller à l'état 66
+    comparaison       aller à l'état 67
+    retourb           aller à l'état 68
+
+
+État 110
+
+   54 condition: SI expression_booleenne ALORS . liste_instructions
+   55          | SI expression_booleenne ALORS . liste_instructions SINON liste_instructions
+
+    DEBUT  décalage et aller à l'état 3
+
+    liste_instructions  aller à l'état 150
+
+
+État 111
+
+   56 tant_que: TANT_QUE expression_booleenne FAIRE . liste_instructions
+
+    DEBUT  décalage et aller à l'état 3
+
+    liste_instructions  aller à l'état 151
+
+
+État 112
+
+  101 liste_variables: variable .
+
+    $défaut  réduction par utilisation de la règle 101 (liste_variables)
+
+
+État 113
+
+  102 liste_variables: liste_variables . VIRGULE variable
+  106 read: LIRE PARENTHESE_OUVRANTE liste_variables . PARENTHESE_FERMANTE
+
+    VIRGULE              décalage et aller à l'état 152
+    PARENTHESE_FERMANTE  décalage et aller à l'état 153
+
+
+État 114
+
+  103 format: CSTE_CHAINE .
+
+    $défaut  réduction par utilisation de la règle 103 (format)
+
+
+État 115
+
+  107 write: ECRIRE PARENTHESE_OUVRANTE format . suite_ecriture PARENTHESE_FERMANTE
+
+    VIRGULE  décalage et aller à l'état 154
+
+    $défaut  réduction par utilisation de la règle 104 (suite_ecriture)
+
+    suite_ecriture  aller à l'état 155
+
+
+État 116
+
+   19 suite_liste_inst: suite_liste_inst instruction POINT_VIRGULE .
+
+    $défaut  réduction par utilisation de la règle 19 (suite_liste_inst)
+
+
+État 117
+
+   57 affectation: variable OPAFF expression .
+
+    $défaut  réduction par utilisation de la règle 57 (affectation)
+
+
+État 118
+
+   61 variable: tableau POINT variable .
+
+    $défaut  réduction par utilisation de la règle 61 (variable)
+
+
+État 119
+
+   11 suite_declaration_type: STRUCT . liste_champs FSTRUCT
+
+    POINT_VIRGULE  décalage et aller à l'état 156
+    IDF            décalage et aller à l'état 157
+
+    liste_champs  aller à l'état 158
+    un_champ      aller à l'état 159
+
+
+État 120
+
+   12 suite_declaration_type: TABLEAU . dimension DE nom_type
+
+    CROCHET_OUVRANT  décalage et aller à l'état 160
+
+    dimension  aller à l'état 161
+
+
+État 121
+
+   10 declaration_type: TYPE IDF DEUX_POINTS suite_declaration_type .
+
+    $défaut  réduction par utilisation de la règle 10 (declaration_type)
+
+
+État 122
+
+   32 nom_type: IDF .
+
+    $défaut  réduction par utilisation de la règle 32 (nom_type)
+
+
+État 123
+
+   33 type_simple: ENTIER .
+
+    $défaut  réduction par utilisation de la règle 33 (type_simple)
+
+
+État 124
+
+   34 type_simple: REEL .
+
+    $défaut  réduction par utilisation de la règle 34 (type_simple)
+
+
+État 125
+
+   35 type_simple: BOOLEEN .
+
+    $défaut  réduction par utilisation de la règle 35 (type_simple)
+
+
+État 126
+
+   36 type_simple: CARACTERE .
+
+    $défaut  réduction par utilisation de la règle 36 (type_simple)
+
+
+État 127
+
+   37 type_simple: CHAINE . CROCHET_OUVRANT CSTE_ENTIERE CROCHET_FERMANT
+
+    CROCHET_OUVRANT  décalage et aller à l'état 162
+
+
+État 128
+
+   38 declaration_variable: VARIABLE IDF DEUX_POINTS nom_type .
+
+    $défaut  réduction par utilisation de la règle 38 (declaration_variable)
+
+
+État 129
+
+   31 nom_type: type_simple .
+
+    $défaut  réduction par utilisation de la règle 31 (nom_type)
+
+
+État 130
+
+   41 liste_parametres: PARENTHESE_OUVRANTE PARENTHESE_FERMANTE .
+
+    $défaut  réduction par utilisation de la règle 41 (liste_parametres)
+
+
+État 131
+
+   45 un_param: IDF . DEUX_POINTS type_simple
+
+    DEUX_POINTS  décalage et aller à l'état 163
+
+
+État 132
+
+   42 liste_parametres: PARENTHESE_OUVRANTE liste_param . PARENTHESE_FERMANTE
+   44 liste_param: liste_param . POINT_VIRGULE un_param
+
+    POINT_VIRGULE        décalage et aller à l'état 164
+    PARENTHESE_FERMANTE  décalage et aller à l'état 165
+
+
+État 133
+
+   43 liste_param: un_param .
+
+    $défaut  réduction par utilisation de la règle 43 (liste_param)
+
+
+État 134
+
+   39 declaration_procedure: PROCEDURE IDF liste_parametres corps .
+
+    $défaut  réduction par utilisation de la règle 39 (declaration_procedure)
+
+
+État 135
+
+   40 declaration_fonction: FONCTION IDF liste_parametres RETOURNE . type_simple corps
+
+    ENTIER     décalage et aller à l'état 123
+    REEL       décalage et aller à l'état 124
+    BOOLEEN    décalage et aller à l'état 125
+    CARACTERE  décalage et aller à l'état 126
+    CHAINE     décalage et aller à l'état 127
+
+    type_simple  aller à l'état 166
+
+
+État 136
+
+   64 rang: rang VIRGULE . expression
+
+    PARENTHESE_OUVRANTE  décalage et aller à l'état 45
+    IDF                  décalage et aller à l'état 17
+    CSTE_ENTIERE         décalage et aller à l'état 46
+    CSTE_REEL            décalage et aller à l'état 47
+    CSTE_BOOLEEN         décalage et aller à l'état 48
+    CSTE_CARACTERE       décalage et aller à l'état 49
+    NOT                  décalage et aller à l'état 50
+    VRAI                 décalage et aller à l'état 51
+    FAUX                 décalage et aller à l'état 52
+
+    appel                 aller à l'état 54
+    variable              aller à l'état 55
+    tableau               aller à l'état 31
+    expression            aller à l'état 167
+    expression_arith      aller à l'état 57
+    e1                    aller à l'état 58
+    e2                    aller à l'état 59
+    e3                    aller à l'état 60
+    e4                    aller à l'état 61
+    expression_booleenne  aller à l'état 62
+    b1                    aller à l'état 63
+    b2                    aller à l'état 64
+    b3                    aller à l'état 65
+    b4                    aller à l'état 66
+    comparaison           aller à l'état 67
+    retourb               aller à l'état 68
+
+
+État 137
+
+   62 tableau: IDF CROCHET_OUVRANT rang CROCHET_FERMANT .
+
+    $défaut  réduction par utilisation de la règle 62 (tableau)
+
+
+État 138
+
+   52 liste_args: liste_args VIRGULE . un_arg
+
+    PARENTHESE_OUVRANTE  décalage et aller à l'état 45
+    IDF                  décalage et aller à l'état 17
+    CSTE_ENTIERE         décalage et aller à l'état 46
+    CSTE_REEL            décalage et aller à l'état 47
+    CSTE_BOOLEEN         décalage et aller à l'état 48
+    CSTE_CARACTERE       décalage et aller à l'état 49
+    NOT                  décalage et aller à l'état 50
+    VRAI                 décalage et aller à l'état 51
+    FAUX                 décalage et aller à l'état 52
+
+    appel                 aller à l'état 54
+    un_arg                aller à l'état 168
+    variable              aller à l'état 55
+    tableau               aller à l'état 31
+    expression            aller à l'état 92
+    expression_arith      aller à l'état 57
+    e1                    aller à l'état 58
+    e2                    aller à l'état 59
+    e3                    aller à l'état 60
+    e4                    aller à l'état 61
+    expression_booleenne  aller à l'état 62
+    b1                    aller à l'état 63
+    b2                    aller à l'état 64
+    b3                    aller à l'état 65
+    b4                    aller à l'état 66
+    comparaison           aller à l'état 67
+    retourb               aller à l'état 68
+
+
+État 139
+
+   50 liste_arguments: PARENTHESE_OUVRANTE liste_args PARENTHESE_FERMANTE .
+
+    $défaut  réduction par utilisation de la règle 50 (liste_arguments)
+
+
+État 140
+
+   74 e3: PARENTHESE_OUVRANTE expression_arith . PARENTHESE_FERMANTE
+
+    PARENTHESE_FERMANTE  décalage et aller à l'état 141
+
+
+État 141
+
+   74 e3: PARENTHESE_OUVRANTE expression_arith PARENTHESE_FERMANTE .
+
+    $défaut  réduction par utilisation de la règle 74 (e3)
+
+
+État 142
+
+   82 expression_booleenne: PARENTHESE_OUVRANTE b1 PARENTHESE_FERMANTE .
+
+    $défaut  réduction par utilisation de la règle 82 (expression_booleenne)
+
+
+État 143
+
+   92 comparaison: expression_arith comparateur expression_arith .
+
+    $défaut  réduction par utilisation de la règle 92 (comparaison)
+
+
+État 144
+
+   68 e1: e1 PLUS e2 .
+   71 e2: e2 . DIV e3
+   72   | e2 . MULT e3
+
+    DIV   décalage et aller à l'état 106
+    MULT  décalage et aller à l'état 107
+
+    $défaut  réduction par utilisation de la règle 68 (e1)
+
+
+État 145
+
+   69 e1: e1 MOINS e2 .
+   71 e2: e2 . DIV e3
+   72   | e2 . MULT e3
+
+    DIV   décalage et aller à l'état 106
+    MULT  décalage et aller à l'état 107
+
+    $défaut  réduction par utilisation de la règle 69 (e1)
+
+
+État 146
+
+   71 e2: e2 DIV e3 .
+
+    $défaut  réduction par utilisation de la règle 71 (e2)
+
+
+État 147
+
+   72 e2: e2 MULT e3 .
+
+    $défaut  réduction par utilisation de la règle 72 (e2)
+
+
+État 148
+
+   83 b1: b1 AND b2 .
+   85 b2: b2 . OR b3
+
+    OR  décalage et aller à l'état 109
+
+    $défaut  réduction par utilisation de la règle 83 (b1)
+
+
+État 149
+
+   85 b2: b2 OR b3 .
+
+    $défaut  réduction par utilisation de la règle 85 (b2)
+
+
+État 150
+
+   54 condition: SI expression_booleenne ALORS liste_instructions .
+   55          | SI expression_booleenne ALORS liste_instructions . SINON liste_instructions
+
+    SINON  décalage et aller à l'état 169
+
+    $défaut  réduction par utilisation de la règle 54 (condition)
+
+
+État 151
+
+   56 tant_que: TANT_QUE expression_booleenne FAIRE liste_instructions .
+
+    $défaut  réduction par utilisation de la règle 56 (tant_que)
+
+
+État 152
+
+  102 liste_variables: liste_variables VIRGULE . variable
+
+    IDF  décalage et aller à l'état 85
+
+    variable  aller à l'état 170
+    tableau   aller à l'état 31
+
+
+État 153
+
+  106 read: LIRE PARENTHESE_OUVRANTE liste_variables PARENTHESE_FERMANTE .
+
+    $défaut  réduction par utilisation de la règle 106 (read)
+
+
+État 154
+
+  105 suite_ecriture: VIRGULE . variable suite_ecriture
+
+    IDF  décalage et aller à l'état 85
+
+    variable  aller à l'état 171
+    tableau   aller à l'état 31
+
+
+État 155
+
+  107 write: ECRIRE PARENTHESE_OUVRANTE format suite_ecriture . PARENTHESE_FERMANTE
+
+    PARENTHESE_FERMANTE  décalage et aller à l'état 172
+
+
+État 156
+
+   29 liste_champs: POINT_VIRGULE . un_champ
+
+    IDF  décalage et aller à l'état 157
+
+    un_champ  aller à l'état 173
+
+
+État 157
+
+   30 un_champ: IDF . DEUX_POINTS nom_type
+
+    DEUX_POINTS  décalage et aller à l'état 174
+
+
+État 158
+
+   11 suite_declaration_type: STRUCT liste_champs . FSTRUCT
+
+    FSTRUCT  décalage et aller à l'état 175
+
+
+État 159
+
+   28 liste_champs: un_champ .
+
+    $défaut  réduction par utilisation de la règle 28 (liste_champs)
+
+
+État 160
+
+   13 dimension: CROCHET_OUVRANT . liste_dimensions CROCHET_FERMANT
+
+    PARENTHESE_OUVRANTE  décalage et aller à l'état 93
+    IDF                  décalage et aller à l'état 17
+    CSTE_ENTIERE         décalage et aller à l'état 46
+    CSTE_REEL            décalage et aller à l'état 47
+    CSTE_CARACTERE       décalage et aller à l'état 49
+
+    liste_dimensions  aller à l'état 176
+    une_dimension     aller à l'état 177
+    appel             aller à l'état 54
+    variable          aller à l'état 55
+    tableau           aller à l'état 31
+    expression_arith  aller à l'état 178
+    e1                aller à l'état 58
+    e2                aller à l'état 59
+    e3                aller à l'état 60
+    e4                aller à l'état 61
+
+
+État 161
+
+   12 suite_declaration_type: TABLEAU dimension . DE nom_type
+
+    DE  décalage et aller à l'état 179
+
+
+État 162
+
+   37 type_simple: CHAINE CROCHET_OUVRANT . CSTE_ENTIERE CROCHET_FERMANT
+
+    CSTE_ENTIERE  décalage et aller à l'état 180
+
+
+État 163
+
+   45 un_param: IDF DEUX_POINTS . type_simple
+
+    ENTIER     décalage et aller à l'état 123
+    REEL       décalage et aller à l'état 124
+    BOOLEEN    décalage et aller à l'état 125
+    CARACTERE  décalage et aller à l'état 126
+    CHAINE     décalage et aller à l'état 127
+
+    type_simple  aller à l'état 181
+
+
+État 164
+
+   44 liste_param: liste_param POINT_VIRGULE . un_param
+
+    IDF  décalage et aller à l'état 131
+
+    un_param  aller à l'état 182
+
+
+État 165
+
+   42 liste_parametres: PARENTHESE_OUVRANTE liste_param PARENTHESE_FERMANTE .
+
+    $défaut  réduction par utilisation de la règle 42 (liste_parametres)
+
+
+État 166
+
+   40 declaration_fonction: FONCTION IDF liste_parametres RETOURNE type_simple . corps
+
+    DEBUT      décalage et aller à l'état 3
+    TYPE       décalage et aller à l'état 4
+    VARIABLE   décalage et aller à l'état 5
+    PROCEDURE  décalage et aller à l'état 6
+    FONCTION   décalage et aller à l'état 7
+
+    corps                  aller à l'état 183
+    liste_declarations     aller à l'état 9
+    declaration            aller à l'état 10
+    declaration_type       aller à l'état 11
+    liste_instructions     aller à l'état 12
+    declaration_variable   aller à l'état 13
+    declaration_procedure  aller à l'état 14
+    declaration_fonction   aller à l'état 15
+
+
+État 167
+
+   64 rang: rang VIRGULE expression .
+
+    $défaut  réduction par utilisation de la règle 64 (rang)
+
+
+État 168
+
+   52 liste_args: liste_args VIRGULE un_arg .
+
+    $défaut  réduction par utilisation de la règle 52 (liste_args)
+
+
+État 169
+
+   55 condition: SI expression_booleenne ALORS liste_instructions SINON . liste_instructions
+
+    DEBUT  décalage et aller à l'état 3
+
+    liste_instructions  aller à l'état 184
+
+
+État 170
+
+  102 liste_variables: liste_variables VIRGULE variable .
+
+    $défaut  réduction par utilisation de la règle 102 (liste_variables)
+
+
+État 171
+
+  105 suite_ecriture: VIRGULE variable . suite_ecriture
+
+    VIRGULE  décalage et aller à l'état 154
+
+    $défaut  réduction par utilisation de la règle 104 (suite_ecriture)
+
+    suite_ecriture  aller à l'état 185
+
+
+État 172
+
+  107 write: ECRIRE PARENTHESE_OUVRANTE format suite_ecriture PARENTHESE_FERMANTE .
+
+    $défaut  réduction par utilisation de la règle 107 (write)
+
+
+État 173
+
+   29 liste_champs: POINT_VIRGULE un_champ .
+
+    $défaut  réduction par utilisation de la règle 29 (liste_champs)
+
+
+État 174
+
+   30 un_champ: IDF DEUX_POINTS . nom_type
+
+    IDF        décalage et aller à l'état 122
+    ENTIER     décalage et aller à l'état 123
+    REEL       décalage et aller à l'état 124
+    BOOLEEN    décalage et aller à l'état 125
+    CARACTERE  décalage et aller à l'état 126
+    CHAINE     décalage et aller à l'état 127
+
+    nom_type     aller à l'état 186
+    type_simple  aller à l'état 129
+
+
+État 175
+
+   11 suite_declaration_type: STRUCT liste_champs FSTRUCT .
+
+    $défaut  réduction par utilisation de la règle 11 (suite_declaration_type)
+
+
+État 176
+
+   13 dimension: CROCHET_OUVRANT liste_dimensions . CROCHET_FERMANT
+   15 liste_dimensions: liste_dimensions . VIRGULE une_dimension
+
+    VIRGULE          décalage et aller à l'état 187
+    CROCHET_FERMANT  décalage et aller à l'état 188
+
+
+État 177
+
+   14 liste_dimensions: une_dimension .
+
+    $défaut  réduction par utilisation de la règle 14 (liste_dimensions)
+
+
+État 178
+
+   16 une_dimension: expression_arith . POINT_POINT expression_arith
+
+    POINT_POINT  décalage et aller à l'état 189
+
+
+État 179
+
+   12 suite_declaration_type: TABLEAU dimension DE . nom_type
+
+    IDF        décalage et aller à l'état 122
+    ENTIER     décalage et aller à l'état 123
+    REEL       décalage et aller à l'état 124
+    BOOLEEN    décalage et aller à l'état 125
+    CARACTERE  décalage et aller à l'état 126
+    CHAINE     décalage et aller à l'état 127
+
+    nom_type     aller à l'état 190
+    type_simple  aller à l'état 129
+
+
+État 180
+
+   37 type_simple: CHAINE CROCHET_OUVRANT CSTE_ENTIERE . CROCHET_FERMANT
+
+    CROCHET_FERMANT  décalage et aller à l'état 191
+
+
+État 181
+
+   45 un_param: IDF DEUX_POINTS type_simple .
+
+    $défaut  réduction par utilisation de la règle 45 (un_param)
+
+
+État 182
+
+   44 liste_param: liste_param POINT_VIRGULE un_param .
+
+    $défaut  réduction par utilisation de la règle 44 (liste_param)
+
+
+État 183
+
+   40 declaration_fonction: FONCTION IDF liste_parametres RETOURNE type_simple corps .
+
+    $défaut  réduction par utilisation de la règle 40 (declaration_fonction)
+
+
+État 184
+
+   55 condition: SI expression_booleenne ALORS liste_instructions SINON liste_instructions .
+
+    $défaut  réduction par utilisation de la règle 55 (condition)
+
+
+État 185
+
+  105 suite_ecriture: VIRGULE variable suite_ecriture .
+
+    $défaut  réduction par utilisation de la règle 105 (suite_ecriture)
+
+
+État 186
+
+   30 un_champ: IDF DEUX_POINTS nom_type .
+
+    $défaut  réduction par utilisation de la règle 30 (un_champ)
+
+
+État 187
+
+   15 liste_dimensions: liste_dimensions VIRGULE . une_dimension
+
+    PARENTHESE_OUVRANTE  décalage et aller à l'état 93
+    IDF                  décalage et aller à l'état 17
+    CSTE_ENTIERE         décalage et aller à l'état 46
+    CSTE_REEL            décalage et aller à l'état 47
+    CSTE_CARACTERE       décalage et aller à l'état 49
+
+    une_dimension     aller à l'état 192
+    appel             aller à l'état 54
+    variable          aller à l'état 55
+    tableau           aller à l'état 31
+    expression_arith  aller à l'état 178
+    e1                aller à l'état 58
+    e2                aller à l'état 59
+    e3                aller à l'état 60
+    e4                aller à l'état 61
+
+
+État 188
+
+   13 dimension: CROCHET_OUVRANT liste_dimensions CROCHET_FERMANT .
+
+    $défaut  réduction par utilisation de la règle 13 (dimension)
+
+
+État 189
+
+   16 une_dimension: expression_arith POINT_POINT . expression_arith
+
+    PARENTHESE_OUVRANTE  décalage et aller à l'état 93
+    IDF                  décalage et aller à l'état 17
+    CSTE_ENTIERE         décalage et aller à l'état 46
+    CSTE_REEL            décalage et aller à l'état 47
+    CSTE_CARACTERE       décalage et aller à l'état 49
+
+    appel             aller à l'état 54
+    variable          aller à l'état 55
+    tableau           aller à l'état 31
+    expression_arith  aller à l'état 193
+    e1                aller à l'état 58
+    e2                aller à l'état 59
+    e3                aller à l'état 60
+    e4                aller à l'état 61
+
+
+État 190
+
+   12 suite_declaration_type: TABLEAU dimension DE nom_type .
+
+    $défaut  réduction par utilisation de la règle 12 (suite_declaration_type)
+
+
+État 191
+
+   37 type_simple: CHAINE CROCHET_OUVRANT CSTE_ENTIERE CROCHET_FERMANT .
+
+    $défaut  réduction par utilisation de la règle 37 (type_simple)
+
+
+État 192
+
+   15 liste_dimensions: liste_dimensions VIRGULE une_dimension .
+
+    $défaut  réduction par utilisation de la règle 15 (liste_dimensions)
+
+
+État 193
+
+   16 une_dimension: expression_arith POINT_POINT expression_arith .
+
+    $défaut  réduction par utilisation de la règle 16 (une_dimension)
